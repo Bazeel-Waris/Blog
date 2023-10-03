@@ -10,6 +10,81 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function deleteUser(Request $request)
+    {
+        $user = User::find($request->id);
+
+        $currentUser = auth()->user();
+
+        if($currentUser->id == $user->id)
+        {
+            $user->delete();
+
+            return response()->json([
+                'Status' => 'User Has been Deleted!',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'Status' => 'could not delete the user!',
+                'Goto' => redirect('/')
+            ]);
+        }
+    }
+
+    public function editUser(Request $request)
+    {
+        $user = User::find($request->id);
+
+        $currentUser = auth()->user();
+
+        if($currentUser->id == $user->id)
+        {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|max:255',
+            ]);
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+
+            $user->save();
+
+            return response()->json([
+                'Status' => 'User Has been updated successfully!'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'Status' => 'User is not Authenticated!'
+            ]);
+        }
+
+    }
+
+    public function getUser(Request $request)
+    {
+        $user = User::find($request->id);
+
+        return response()->json([
+            'User Profile' => $user
+        ]);
+    }
+
+    public function getAllUsers()
+    {
+        $users = User::all();
+
+        return response()->json([
+            'All Users' => $users
+        ], 200);
+    }
+
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -48,5 +123,6 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Unauthorized User'], 401);
     }
+
 
 }

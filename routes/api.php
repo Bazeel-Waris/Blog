@@ -25,13 +25,23 @@ Route::middleware('auth:sanctum')->group(function () {
     // Post Creation Route
     Route::post('/add-post', [PostController::class, 'store']);
     Route::get('/displayAll', [PostController::class, 'index']);
-    Route::get('/displayPosts/{id}', [PostController::class, 'displayUserPost']);
+    Route::get('/user-posts/{id}', [PostController::class, 'displayUserPosts']);
+    Route::put('/edit-post/{id}', [PostController::class, 'editPost']);
+    Route::delete('/delete-post/{id}', [PostController::class, 'deletePost']);
 
 });
 
 Route::middleware('auth:sanctum')->group(function (){
 
+    // Users Routes
+    Route::get('/user/{id}', [UserController::class, 'getUser']);
+    Route::put('/edit-user/{id}', [UserController::class, 'editUser']);
+    Route::delete('/delete-user/{id}', [UserController::class, 'deleteUser']);
 });
+
+// Users Routes
+Route::get('/users', [UserController::class, 'getAllUsers']);
+
 // User Registration & User Login Routes
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
