@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,7 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Route::apiResource('posts', PostController::class);
-    // Post Creation Route
+    // Post Routes
     Route::post('/add-post', [PostController::class, 'store']);
     Route::get('/displayAll', [PostController::class, 'index']);
     Route::get('/user-posts/{id}', [PostController::class, 'displayUserPosts']);
@@ -39,8 +39,18 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::delete('/delete-user/{id}', [UserController::class, 'deleteUser']);
 });
 
+Route::middleware('auth:sanctum')->group(function (){
+
+    // Comments Routes
+    Route::post('/post/{post_id}/add-comment', [CommentController::class, 'createComment']);
+    Route::delete('/post/{post_id}/comment/{id}', [CommentController::class, 'deleteComment']);
+});
+
 // Users Routes
 Route::get('/users', [UserController::class, 'getAllUsers']);
+
+// Comments Routes
+Route::get('/post/{post_id}/comments', [CommentController::class, 'getPostComments']);
 
 // User Registration & User Login Routes
 Route::post('/register', [UserController::class, 'register']);

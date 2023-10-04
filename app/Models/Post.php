@@ -13,8 +13,15 @@ class Post extends Model
 
     protected $fillable = ['title', 'body', 'user_id'];
 
+    // Defining the relationship with users table
     public function postOwner()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Defining the relationship with comments table
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

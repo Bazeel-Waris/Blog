@@ -10,14 +10,10 @@ class PostController extends Controller
 
     public function deletePost($id)
     {
-        $user = auth()->user(); // Get the currently authenticated user
+        $user = auth()->user();
         $post = Post::find($id);
         // $post = $post->where('id', $id)->get();
 
-        // return response()->json([
-        //     'user' => $user->id,
-        //     'user_id' => $post->user_id
-        // ]);
         // Check if the post belongs to the authenticated user
         if ($post->user_id == $user->id) {
             $post->delete(); // Delete the post
@@ -30,7 +26,6 @@ class PostController extends Controller
 
     public function editPost(Request $request)
     {
-        // $post = Post::find($id);
 
         $user = auth()->id();
         $post = Post::find($request->id);
