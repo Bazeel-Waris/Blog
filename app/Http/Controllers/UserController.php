@@ -17,6 +17,10 @@ class UserController extends Controller
 
         $currentUser = auth()->user();
 
+        return response()->json([
+            'Status' => $user,
+            'Status' => $currentUser,
+        ]);
         if($currentUser->id == $user->id)
         {
             $user->delete();
@@ -51,6 +55,7 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = $request->password;
+            $user->isAdmin = false;
 
             $user->save();
 
@@ -79,10 +84,22 @@ class UserController extends Controller
     public function getAllUsers()
     {
         $users = User::all();
+        $admin = auth()->user();
 
-        return response()->json([
-            'All Users' => $users
-        ], 200);
+        // array_shift($user[0]);
+        if($admin->isAdmin)
+        {
+            return response()->json([
+                'All Users' => $users
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'Message' => 'Not Allowed to access Page'
+            ], 404);
+        }
+
     }
 
     public function register(Request $request)
@@ -98,13 +115,11 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user->isAdmin = false;
         $user->save();
-
-       // $token = $user->createToken('userAuthToken')->plainTextToken;
 
         return response()->json([
             'user' => $user,
-            //'token' => $token
         ]);
     }
 

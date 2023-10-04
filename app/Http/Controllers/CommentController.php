@@ -65,18 +65,21 @@ class CommentController extends Controller
 
         $comments = Comment::where('post_id', $post->id)->get();
 
-        if(empty($comments))
-        {
-            return response()->json([
-                'Comments' => $comments
-            ], 200);
-        }
-        else
-        {
-            return response()->json([
-                'Status' => 'Invalid Response'
-            ], 400);
-        }
+        return response()->json([
+            'Comments' => $comments
+        ], 200);
+        // if(empty($comments))
+        // {
+        //     return response()->json([
+        //         'Comments' => $comments
+        //     ], 200);
+        // }
+        // else
+        // {
+        //     return response()->json([
+        //         'Status' => 'No Comments Available!'
+        //     ], 400);
+        // }
 
     }
 }
